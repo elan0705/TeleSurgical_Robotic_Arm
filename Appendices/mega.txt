@@ -1,0 +1,89 @@
+#include <SoftwareSerial.h>
+
+SoftwareSerial mySerial(10, 11); // RX, TX
+String analog1 = "A";
+String analog2 = "B";
+String analog3 = "C";
+String analog4 = "D";
+String analog5 = "E";
+String analog6 = "F";
+String analog7 = "G";
+
+String analog8 = "H";
+String analog9 = "I";
+String analog10 = "J";
+
+int pot1 = 0;
+int pot2 = 0;
+int pot3 = 0;
+int pot4 = 0;
+int pot5 = 0;
+int pot6 = 0;
+int pot7 = 0;
+
+int pot8 = 0;
+int pot9 = 0;
+int pot10 = 0;
+
+void setup() {
+  // put your setup code here, to run once:
+  Serial.begin(9600);
+  mySerial.begin(9600);
+
+}
+
+void loop() {
+  pot1 = analogRead(A0);
+  pot2 = analogRead(A1);
+  pot3 = analogRead(A2);
+  pot4 = analogRead(A3);
+  pot5 = analogRead(A4);
+  pot6 = analogRead(A5);
+  pot7 = analogRead(A6);
+
+  pot8 = analogRead(A7);
+  pot9 = analogRead(A8);
+  pot10 = analogRead(A9);
+
+//  pot8 = map(pot8, 700, 900, 0, 1024);
+//  pot9 = map(pot9, 700, 900, 0, 1024);
+//  pot10 = map(pot10, 700, 900, 0, 1024);
+
+  Serial.println(analog1 + pot1);
+  Serial.println(analog2 + pot2);
+  Serial.println(analog3 + pot3);
+  Serial.println(analog4 + pot4);
+  Serial.println(analog5 + pot5);
+  Serial.println(analog6 + pot6);
+  Serial.println(analog7 + pot7);
+
+  Serial.println(analog8 + pot8);
+  Serial.println(analog9 + pot9);
+  Serial.println(analog10 + pot10);
+
+
+  mySerial.println(analog1 + pot1);
+  delay(100);
+  mySerial.println(analog2 + pot2);
+  delay(100);
+  mySerial.println(analog3 + pot3);
+  delay(100);
+  mySerial.println(analog4 + pot4);
+  delay(100);
+  mySerial.println(analog5 + pot5);
+  delay(100);
+  mySerial.println(analog6 + pot6);
+  delay(100);
+  mySerial.println(analog7 + pot7);
+  delay(100);
+
+  mySerial.println(analog8 + pot8);
+  delay(100);
+  mySerial.println(analog9 + pot9);
+  delay(100);
+  mySerial.println(analog10 + pot10);
+  delay(100);
+
+
+
+}

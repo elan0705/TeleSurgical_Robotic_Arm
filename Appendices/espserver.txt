@@ -1,0 +1,124 @@
+/*  Accesspoint - station communication without router
+    see: https://github.com/esp8266/Arduino/blob/master/doc/esp8266wifi/soft-access-point-class.rst
+         https://github.com/esp8266/Arduino/blob/master/doc/esp8266wifi/soft-access-point-examples.rst
+         https://github.com/esp8266/Arduino/issues/504
+    Works with: station_bare_01.ino
+*/
+
+
+#include <ESP8266WiFi.h>
+
+#include <Wire.h>
+#include <Adafruit_PWMServoDriver.h>
+Adafruit_PWMServoDriver pwm = Adafruit_PWMServoDriver();
+
+WiFiServer server(80);
+IPAddress IP(192, 168, 4, 15);
+IPAddress mask = (255, 255, 255, 0);
+
+//////////////////////////////////////////////////////////////////////////////////////////
+byte ledPin = 2;
+#define SERVOMIN  150 // this is the 'minimum' pulse length count (out of 4096)
+#define SERVOMAX  600 // this is the 'maximum' pulse length count (out of 4096)
+// our servo # counter
+uint8_t servonum = 0;
+String man = "0";
+void setup() {
+  Serial.begin(9600);
+  WiFi.mode(WIFI_AP);
+  WiFi.softAP("Wemos_AP", "Wemos_comm");
+  WiFi.softAPConfig(IP, IP, mask);
+  server.begin();
+  pinMode(ledPin, OUTPUT);
+  Serial.println();
+  Serial.println("accesspoint_bare_01.ino");
+  Serial.println("Server started.");
+  Serial.print("IP: ");     Serial.println(WiFi.softAPIP());
+  Serial.print("MAC:");     Serial.println(WiFi.softAPmacAddress());
+  ////////////////////////////////////////////////////////////////////////////////
+  pwm.begin();
+
+  pwm.setPWMFreq(60);  // Analog servos run at ~60 Hz updates
+
+  delay(10);
+
+}
+
+void loop() {
+  WiFiClient client = server.available();
+  if (!client) {
+    return;
+  }
+  digitalWrite(ledPin, LOW);
+  String request = client.readStringUntil('\r');
+  Serial.println("********************************");
+  Serial.println("From the station: " + request);
+  if (request.startsWith("A")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(0, 0, hell);
+  }
+  if (request.startsWith("B")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(1, 0, hell);
+  }
+  if (request.startsWith("C")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(2, 0, hell);
+  }
+  if (request.startsWith("D")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(3, 0, hell);
+  }
+  if (request.startsWith("E")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(4, 0, hell);
+  }
+  if (request.startsWith("F")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(5, 0, hell);
+  }
+  if (request.startsWith("G")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 0, 1024, 150, 600);
+    Serial.print(hell);
+    pwm.setPWM(6, 0, hell);
+  }
+
+  if (request.startsWith("H")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 720, 850, 150, 600);//check
+    Serial.print(hell);
+    pwm.setPWM(7, 0, hell);
+  }
+  if (request.startsWith("I")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 720, 850, 150, 600);//check
+    Serial.print(hell);
+    pwm.setPWM(8, 0, hell);
+  }
+  if (request.startsWith("J")) {
+    request.remove(0, 1);
+    int hell = map((request.toInt()), 720, 850, 150, 600);//check
+    Serial.print(hell);
+    pwm.setPWM(9, 0, hell);
+  }
+
+
+
+  client.flush();
+  //  Serial.print("Byte sent to the station: ");
+  //  Serial.println(client.println(request + "ca" + "\r"));
+  digitalWrite(ledPin, HIGH);
+}
